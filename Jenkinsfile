@@ -16,9 +16,16 @@ pipeline {
                 echo 'Build successfully'
             }
         }
-        stage('Test') {
-            steps {
-                echo 'Hello World'
+        stage("Push To DockerHub"){
+            steps{
+                withCredentials([usernamePassword(
+                    credentialsId:"dockerHubCred",
+                    usernameVariable:"dockerHubUser", 
+                    passwordVariable:"dockerHubPass")]){
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}
+                sh "docker image tag node-app:latest ${env.dockerHubUser}/node-app:latest"
+                sh "docker push ${env.dockerHubUser}/node-app:latest"
+                }
             }
         }
         stage('Deploy') {
