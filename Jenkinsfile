@@ -31,7 +31,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'This is node-app deployment stage'
-                sh "docker run -d -p 8000:8000 node-app:latest"
+                sh "docker compose up -d"
                 echo 'Node app successfully deployed on docker container which runs on agent machine'
             }
         }
