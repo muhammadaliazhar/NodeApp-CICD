@@ -12,27 +12,22 @@ pipeline {
         }
         stage('Code Clone') {
             steps {
-                echo 'This is code cloning from Github repo'
-                git url: "https://github.com/muhammadaliazhar/NodeApp-CICD.git" , branch: "main"
-                echo 'code clone successfully'
+                script{
+                     clone("https://github.com/muhammadaliazhar/NodeApp-CICD.git","main")
+                }
             }
         }
         stage('Build') {
             steps {
-                echo 'This is building code using docker'
-                sh "docker build -t todo-app ."
-                echo 'Build successfully'
+                script{
+                    docker_build("todo-app","latest","maliazhar")
+                }
             }
         }
         stage("Push To DockerHub"){
             steps{
-                withCredentials([usernamePassword(
-                    credentialsId:"dockerHubCred",
-                    usernameVariable:"dockerHubUser", 
-                    passwordVariable:"dockerHubPass")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
-                sh "docker image tag todo-app:latest ${env.dockerHubUser}/todo-app:latest"
-                sh "docker push ${env.dockerHubUser}/todo-app:latest"
+                script{
+                    docker_push("todo-app","latest","maliazhar")
                 }
             }
         }
