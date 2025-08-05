@@ -27,7 +27,7 @@ pipeline {
                     credentialsId:"dockerHubCred",
                     usernameVariable:"dockerHubUser", 
                     passwordVariable:"dockerHubPass")]){
-                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}
+                sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}"
                 sh "docker image tag todo-app:latest ${env.dockerHubUser}/todo-app:latest"
                 sh "docker push ${env.dockerHubUser}/todo-app:latest"
                 }
