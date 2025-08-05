@@ -1,7 +1,12 @@
 pipeline {
-    agent { label "agent-1" }
+    agent { label "dev-server" }
 
     stages {
+        stage('Hello DevOps') {
+            steps {
+                echo 'ALi Azhar DevOps Engineer'
+            }
+        }
         stage('Code Clone') {
             steps {
                 echo 'This is code cloning from Github repo'
@@ -12,7 +17,7 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'This is building code using docker'
-                sh "docker build -t node-app ."
+                sh "docker build -t todo-app ."
                 echo 'Build successfully'
             }
         }
@@ -23,15 +28,15 @@ pipeline {
                     usernameVariable:"dockerHubUser", 
                     passwordVariable:"dockerHubPass")]){
                 sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPass}
-                sh "docker image tag node-app:latest ${env.dockerHubUser}/node-app:latest"
-                sh "docker push ${env.dockerHubUser}/node-app:latest"
+                sh "docker image tag todo-app:latest ${env.dockerHubUser}/todo-app:latest"
+                sh "docker push ${env.dockerHubUser}/todo-app:latest"
                 }
             }
         }
         stage('Deploy') {
             steps {
                 echo 'This is node-app deployment stage'
-                sh "docker compose up -d"
+                sh "docker compose down && docker compose up -d"
                 echo 'Node app successfully deployed on docker container which runs on agent machine'
             }
         }
