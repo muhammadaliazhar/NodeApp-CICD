@@ -1,10 +1,13 @@
+@Library("shared") _ 
 pipeline {
     agent { label "dev-server" }
 
     stages {
-        stage('Hello DevOps') {
+        stage('Welcome') {
             steps {
-                echo 'ALi Azhar DevOps Engineer'
+                script{
+                    hello()
+                }
             }
         }
         stage('Code Clone') {
